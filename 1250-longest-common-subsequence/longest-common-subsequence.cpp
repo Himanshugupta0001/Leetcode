@@ -3,24 +3,24 @@ public:
     int longestCommonSubsequence(string text1, string text2) {
         int n = text1.size();
         int m = text2.size();
-        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+        vector<int> prev(m+1, 0), cur(m+1, 0);
 
-        for(int j=0; j<=m; j++) dp[0][j] = 0;
-        for(int i=0; i<=n; i++) dp[i][0] = 0;
+        for(int j=0; j<=m; j++) prev[j] = 0;
 
         for(int i=1; i<=n; i++){
             for(int j=1; j<=m; j++){
                 if(text1[i-1] == text2[j-1]){
-                    dp[i][j] = 1 + dp[i-1][j-1];
+                    cur[j] = 1 + prev[j-1];
                 }
                 else{
-                    int l1 = 0 + dp[i-1][j];
-                    int l2 = 0 + dp[i][j-1];
+                    int l1 = 0 + prev[j];
+                    int l2 = 0 + cur[j-1];
 
-                    dp[i][j] = max(l1, l2);
+                    cur[j] = max(l1, l2);
                 }
             }
+            prev = cur;
         }
-        return dp[n][m];
+        return prev[m];
     }
 };

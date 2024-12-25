@@ -12,13 +12,15 @@ public:
                 no++;
             }
 
-            while(no > k){
+            if(no > k){
                 if(nums[l] == 0){
                     no--;
                 }
                 l = l+1;
             }
-            ml = max(ml, r-l+1);
+            if(no <= k){
+                ml = max(ml, r-l+1);
+            }
             r = r+1;
         }
         return ml;

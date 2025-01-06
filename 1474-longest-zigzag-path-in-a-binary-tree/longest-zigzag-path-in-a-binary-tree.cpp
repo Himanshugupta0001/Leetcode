@@ -12,22 +12,17 @@
 class Solution {
 public:
     int maxPath = 0;
-    void f(TreeNode* root, int steps, bool goLeft){
+    void f(TreeNode* root, int left, int right){
         if(root == NULL) return;
 
-        maxPath = max(maxPath, steps);
-        if(goLeft == true){
-            f(root->left, steps+1, false);
-            f(root->right, 1, true);
-        }
-        else{
-            f(root->right, steps+1, true);
-            f(root->left, 1, false);
-        }
+        maxPath = max({maxPath, left, right});
+
+        f(root->left, right+1, 0);
+        f(root->right, 0, left+1);
+        
     }
     int longestZigZag(TreeNode* root) {
-        f(root, 0, true);
-        f(root, 0, false);
+        f(root, 0, 0);
         return maxPath;
     }
 };

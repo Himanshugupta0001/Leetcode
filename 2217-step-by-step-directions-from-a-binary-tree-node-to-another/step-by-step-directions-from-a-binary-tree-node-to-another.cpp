@@ -11,24 +11,6 @@
  */
 class Solution {
 public:
-    TreeNode* lowestCommonAncestor(TreeNode* root, int p, int q) {
-        if(root == NULL || p == root->val || q == root->val){
-            return root;
-        }
-
-        TreeNode* left = lowestCommonAncestor(root->left, p, q);
-        TreeNode* right = lowestCommonAncestor(root->right, p, q);
-
-        if(left == NULL){
-            return right;
-        }
-        else if(right == NULL){
-            return left;
-        }
-        else{
-            return root;
-        }
-    }
     bool findPath(TreeNode* LCA, int target, string &path){
         if(LCA == NULL){
             return false;
@@ -56,20 +38,26 @@ public:
 
     }
     string getDirections(TreeNode* root, int startValue, int destValue) {
-        TreeNode* LCA = lowestCommonAncestor(root, startValue, destValue);
 
-        string lcaToSrc = "";
-        string lcaToDest = "";
+        string rootToSrc = "";
+        string rootToDest = "";
 
-        findPath(LCA, startValue, lcaToSrc);
-        findPath(LCA, destValue, lcaToDest);
+        findPath(root, startValue, rootToSrc);
+        findPath(root, destValue, rootToDest);
+
+        int l = 0;
+        while(l < rootToSrc.size() && l < rootToDest.size() && rootToSrc[l] == rootToDest[l]){
+            l++;
+        }
 
         string result = "";
-        for(int i=0; i<lcaToSrc.size(); i++){
+        for(int i=0; i<rootToSrc.size() - l; i++){
             result.push_back('U');
         }
 
-        result += lcaToDest;
+        for(int i=l; i<rootToDest.size(); i++){
+            result.push_back(rootToDest[i]);
+        }
 
         return result;
     }

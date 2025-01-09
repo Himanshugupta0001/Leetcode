@@ -11,25 +11,30 @@
  */
 class Solution {
 public:
-    string ans = "";
-    void dfs(TreeNode* root, string cur){
-        if(root == NULL) return;
-
-        cur = char(root->val + 'a') + cur;
-
-        if(root->left == NULL && root->right == NULL){
-            if(ans == "" || ans > cur){
-                ans = cur;
-            }
-            return;
-        }
-
-        dfs(root->left, cur);
-        dfs(root->right, cur);
-    }
-
     string smallestFromLeaf(TreeNode* root) {
-        dfs(root, ans);
+        queue<pair<TreeNode*, string>> q;
+        q.push({root, string(1, char(root->val + 'a'))});
+
+        string ans ="";
+
+        while(!q.empty()){
+            auto [node, cur] = q.front();
+            q.pop();
+
+            if(node->left == NULL && node->right == NULL){
+                if(ans == "" || ans > cur){
+                    ans = cur;
+                }
+            }
+
+            if(node->left){
+                q.push({node->left, char(node->left->val + 'a') + cur});
+            }
+
+            if(node->right){
+                q.push({node->right, char(node->right->val + 'a') + cur});
+            }
+        }
         return ans;
     }
 };

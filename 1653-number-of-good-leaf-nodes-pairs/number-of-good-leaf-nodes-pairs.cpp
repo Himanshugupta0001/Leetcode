@@ -11,57 +11,44 @@
  */
 class Solution {
 public:
-    void makeGraph(TreeNode* root, TreeNode* prev, unordered_map<TreeNode*, vector<TreeNode*>> &adj, unordered_set<TreeNode*> &st){
+    vector<int> f(TreeNode* root, int &distance, int &goodLeafNodes){
         if(root == NULL){
-            return;
+            return {0};
         }
 
         if(root->left == NULL && root->right == NULL){
-            st.insert(root);
+            return {1};
         }
 
-        if(prev != NULL){
-            adj[root].push_back(prev);
-            adj[prev].push_back(root);
-        }
+        vector<int> left_d = f(root->left, distance, goodLeafNodes);
+        vector<int> right_d = f(root->right, distance, goodLeafNodes);
 
-        makeGraph(root->left, root, adj, st);
-        makeGraph(root->right, root, adj, st);
-
-    }
-    int countPairs(TreeNode* root, int distance) {
-        unordered_map<TreeNode*, vector<TreeNode*>> adj;
-        unordered_set<TreeNode*> st;
-
-        makeGraph(root, NULL, adj, st);
-
-        int count = 0;
-
-        for(auto &leaf : st){
-            queue<TreeNode*> q;
-            unordered_set<TreeNode*> visited;
-            q.push(leaf);
-            visited.insert(leaf);
-
-            for(int level=0; level <= distance; level++){
-                int size = q.size();
-                while(size--){
-                    TreeNode* cur = q.front();
-                    q.pop();
-
-                    if(cur != leaf && st.count(cur)){
-                        count++;
-                    }
-
-                    for(auto &ngbr : adj[cur]){
-                        if(!visited.count(ngbr)){
-                            q.push(ngbr);
-                            visited.insert(ngbr);
-                        }
-                    }
+        for(int &l : left_d){
+            for(int &r : right_d){
+                if(l != 0 && r != 0 && l + r <= distance){
+                    goodLeafNodes++;
                 }
             }
         }
-        return count/2;
+
+        vector<int> curr_d;
+        for(int &l : left_d){
+            if(l != 0 && l + 1 <= distance){
+                curr_d.push_back(l+1);
+            }
+        }
+
+        for(int &r : right_d){
+            if(r != 0 && r + 1 <= distance){
+                curr_d.push_back(r+1);
+            }
+        }
+        return curr_d;
+    }
+    int countPairs(TreeNode* root, int distance) {
+        int goodLeafNodes = 0;
+        f(root, distance, goodLeafNodes);
+
+        return goodLeafNodes;
     }
 };

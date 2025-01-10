@@ -11,13 +11,15 @@ public:
                 cnt++;
             }
 
-            while(cnt > k){
+            if(cnt > k){
                 if(nums[l] == 0){
                     cnt--;
                 }
                 l = l+1;
             }
-            ml = max(ml, r-l+1);
+            if(cnt <= k){
+                ml = max(ml, r-l+1);
+            }
             r = r+1;
         }
         return ml;

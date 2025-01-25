@@ -1,23 +1,5 @@
 class Solution {
 public:
-    bool dfs(unordered_map<int, vector<int>>& mp, vector<bool> &visited, int src, int dest){
-        if(src == dest){
-            return true;
-        }
-
-        if(visited[src] == true){
-            return false;
-        }
-
-        visited[src] = true;
-
-        for(auto &it : mp[src]){
-            if(dfs(mp, visited, it, dest) == true){
-                return true;
-            }
-        }
-        return false;
-    }
     bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
         unordered_map<int, vector<int>> mp;
         for(vector<int> &it : edges){
@@ -28,6 +10,25 @@ public:
         }
 
         vector<bool> visited(n, false);
-        return dfs(mp, visited, source, destination);
+        queue<int> q;
+        q.push(source);
+        visited[source] = true;
+
+        while(!q.empty()){
+            int node = q.front();
+            q.pop();
+
+            if(node == destination){
+                return true;
+            }
+
+            for(auto it : mp[node]){
+                if(!visited[it]){
+                    q.push(it);
+                    visited[it] = true;
+                }
+            }
+        }
+        return false;
     }
 };

@@ -1,15 +1,25 @@
 class Solution {
 public:
     int n;
-    void dfs(vector<int>& edges, int node, vector<int> &dist, vector<bool> &visited){
+    void bfs(vector<int>& edges, int node, vector<int> &dist){
+        queue<int> q;
+        dist[node] = 0;
+        vector<bool> visited(n, false);
+        q.push(node);
         visited[node] = true;
 
-        int v = edges[node];
+        while(!q.empty()){
 
-        if(v != -1 && !visited[v]){
-            visited[v] = true;
-            dist[v] = 1 + dist[node];
-            dfs(edges, v, dist, visited);
+            int u = q.front();
+            q.pop();
+
+            int v = edges[u];
+
+            if(v != -1 && !visited[v]){
+                visited[v] = true;
+                dist[v] = 1 + dist[u];
+                q.push(v);
+            }
         }
     }
 
@@ -19,14 +29,9 @@ public:
         vector<int> dist1(n, INT_MAX);
         vector<int> dist2(n, INT_MAX);
 
-        vector<bool> visited1(n, false);
-        vector<bool> visited2(n, false);
 
-        dist1[node1] = 0;
-        dist2[node2] = 0;
-
-        dfs(edges, node1, dist1, visited1);
-        dfs(edges, node2, dist2, visited2);
+        bfs(edges, node1, dist1);
+        bfs(edges, node2, dist2);
 
         int minNode = -1;
         int minTillNow = INT_MAX;

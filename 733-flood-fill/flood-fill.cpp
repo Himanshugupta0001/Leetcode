@@ -5,18 +5,17 @@ public:
         int n = image.size();
         int m = image[0].size();
 
-        queue<pair<pair<int, int>, int>> q;
+        queue<pair<int, int>> q;
         vector<vector<int>> vis = image;
         vis[sr][sc] = color;
 
-        q.push({{sr, sc}, color});
+        q.push({sr, sc});
         int dx[] = {-1, 0, 1, 0};
         int dy[] = {0, 1, 0, -1};
 
         while(!q.empty()){
-            int r = q.front().first.first;
-            int c = q.front().first.second;
-            int co = q.front().second;
+            int r = q.front().first;
+            int c = q.front().second;
             q.pop();
 
             for(int i=0; i<4; i++){
@@ -25,7 +24,7 @@ public:
 
                 if(nx>=0 && nx<n && ny>=0 && ny<m && image[nx][ny] == ac && vis[nx][ny] != color){
                     vis[nx][ny] = color;
-                    q.push({{nx, ny}, color});
+                    q.push({nx, ny});
                 }
             }
         }

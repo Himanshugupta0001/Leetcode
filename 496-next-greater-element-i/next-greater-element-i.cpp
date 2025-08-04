@@ -2,11 +2,10 @@ class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
         int n = nums2.size();
-        unordered_map<int, int> mp;
         stack<int> st;
+        map<int, int> mp;
 
         for(int i=n-1; i>=0; i--){
-
             while(!st.empty() && st.top() <= nums2[i]){
                 st.pop();
             }
@@ -22,8 +21,8 @@ public:
 
         vector<int> ans;
 
-        for(int num : nums1){
-            ans.push_back(mp[num]);
+        for(auto it : nums1){
+            ans.push_back(mp[it]);
         }
         return ans;
     }

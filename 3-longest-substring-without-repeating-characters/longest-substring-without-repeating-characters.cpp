@@ -7,11 +7,10 @@ public:
         int r = 0;
         vector<int> hash(256, -1);
         while(r < n){
-            while(hash[s[r]] != -1){
-                hash[s[l]]--;
-                l++;
+            if(hash[s[r]] != -1 && hash[s[r]] >= l){
+                l = hash[s[r]] + 1;
             }
-            hash[s[r]]++;
+            hash[s[r]] = r;
             maxi = max(maxi, r-l+1);
             r++;
         }

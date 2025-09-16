@@ -2,22 +2,25 @@ class Solution {
 public:
     vector<int> replaceNonCoprimes(vector<int>& nums) {
         int n = nums.size();
-        vector<int> ans;
-        for(int i=0; i<n; i++){
-            while(!ans.empty()){
-                int prev = ans.back();
-                int curr = nums[i];
+        stack<int>st;
 
-                int GCD = gcd(prev, curr);
-                if(GCD == 1){
-                    break;
-                }
-                ans.pop_back();
-                int LCM = prev / GCD*curr;
-                nums[i] = LCM;
+        for(int i=0; i<n; i++){
+            int curr = nums[i];
+            while(!st.empty() && gcd(1LL*st.top(), 1LL*curr) != 1){
+                int tp = st.top();
+                st.pop();
+                curr = (1LL*tp*curr/(gcd(1LL*tp, 1LL*curr)));
             }
-            ans.push_back(nums[i]);
+            st.push(curr);
         }
+
+        vector<int> ans;
+        while(!st.empty()){
+            ans.push_back(st.top());
+            st.pop();
+        }
+        
+        reverse(ans.begin(),ans.end());
         return ans;
     }
 };

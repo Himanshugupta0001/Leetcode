@@ -3,7 +3,8 @@ public:
     class Node{
         public:
             int key, value;
-            Node* next, *prev;
+            Node *next, *prev;
+
             Node(int key, int value){
                 this->key = key;
                 this->value = value;
@@ -13,7 +14,7 @@ public:
     };
 
     int capacity;
-    unordered_map<int, Node*>mp;
+    unordered_map<int, Node*> mp;
 
     Node* head = new Node(-1, -1);
     Node* tail = new Node(-1, -1);
@@ -25,22 +26,25 @@ public:
     }
 
     void deleteNode(Node* node){
-        node->prev->next = node->next;
-        node->next->prev = node->prev;
+        Node* delprev = node->prev;
+        Node* delnext = node->next;
+        delprev->next = delnext;
+        delnext->prev = delprev;
     }
 
     void insertAtHead(Node* node){
         Node* temp = head->next;
         head->next = node;
-        node->prev = head; 
+        node->prev = head;
 
         node->next = temp;
         temp->prev = node;
     }
     
     int get(int key) {
-        if(mp.find(key) == mp.end())
+        if(mp.find(key) == mp.end()){
             return -1;
+        }
         else{
             Node* currNode = mp[key];
             deleteNode(currNode);
@@ -52,19 +56,19 @@ public:
     void put(int key, int value) {
         if(mp.find(key) != mp.end()){
             Node* currNode = mp[key];
-            currNode->value = value; 
+            currNode->value = value;
             deleteNode(currNode);
             insertAtHead(currNode);
         }
         else{
             Node* newNode = new Node(key, value);
             if(mp.size() == capacity){
-                Node* todel = tail->prev;
-                mp.erase(todel->key);
+                Node* last = tail->prev;
+                mp.erase(last->key);
                 deleteNode(tail->prev);
                 insertAtHead(newNode);
-                mp[key]  = newNode;
-                delete todel;
+                mp[key] = newNode;
+                delete last;
             }
             else{
                 insertAtHead(newNode);

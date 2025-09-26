@@ -2,19 +2,14 @@ class Solution {
 public:
     int triangleNumber(vector<int>& nums) {
         int n = nums.size();
-        int cnt = 0;
         sort(begin(nums), end(nums));
-        for(int i=n-1; i>=2; i--){
-            int l = 0;
-            int r = i-1;
-            while(l < r){
-                if(nums[l] + nums[r] > nums[i]){
-                    cnt += (r - l);
-                    r--;
-                }
-                else{
-                    l++;
-                }
+
+        int cnt = 0;
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++){
+                int sum = nums[i] + nums[j];
+                int idx = lower_bound(nums.begin() + j + 1, nums.end(), sum) - nums.begin();
+                cnt += (idx - 1 - j);
             }
         }
         return cnt;
